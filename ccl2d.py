@@ -12,7 +12,19 @@ import cv2
 import numpy as np
 from geodata.stopwatch import sw_timer
 
-def ccl2d(data_in,thresh,verbose=False,graph=False,thresh_inverse=False,global_latlon_grid = True,norm_data=True,perform_threshold=True):
+import csv
+
+# DUMP THRESHOLD RESULT OUT TO CSV FILE
+def dump_array_to_csv (array, filename):
+    print ('Dumping to '+filename)
+#    (ny, nx) = array.shape
+#    print ('(ny, nx) = ({}, {})'.format(ny, nx))
+#    with open (filename, 'w', newline='') as csvfile:
+#        writer = csv.writer (csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+#        writer.writerows (array)
+
+
+def ccl2d(data_in,thresh,verbose=False,graph=False,thresh_inverse=False,global_latlon_grid = True,norm_data=True,perform_threshold=True,workFileName=''):
 
     sw_timer.stamp('ccl2d start')
 
@@ -44,10 +56,19 @@ def ccl2d(data_in,thresh,verbose=False,graph=False,thresh_inverse=False,global_l
 
     if perform_threshold:
         sw_timer.stamp('ccl2d perform_threshold start')
+        ret, thresh = cv2.threshold(data, d_trigger, 1, cv2.THRESH_BINARY)
+        print ('Dumping threshold image...')
+        print ('workFilename = ' + workFileName)
+        dumpFileName = workFileName + '_thresh_img.csv'
+        print ('dumpFilename = ' + dumpFileName)
+        dump_array_to_csv (thresh, dumpFileName)
+
         if not thresh_inverse:
             ret, thresh = cv2.threshold(data, d_trigger, d_out, cv2.THRESH_BINARY)
         else:
             ret, thresh = cv2.threshold(data, d_trigger, d_out, cv2.THRESH_BINARY_INV)
+
+
         sw_timer.stamp('ccl2d perform_threshold end')
 
     if verbose:

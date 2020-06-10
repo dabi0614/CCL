@@ -41,6 +41,7 @@ from dask.distributed import Client
 import numpy as np
 import os
 from ccl2d import ccl2d
+from ccl2d import dump_array_to_csv
 
 from geodata.stopwatch import sw_timer
 
@@ -526,13 +527,14 @@ def ccl_relabel2(m0,m1,verbose=False,marker_base=None,global_latlon_grid=True):
     return (m0_new,m1_new,m0_eol,translation01,translation11)
 
 class ccl_marker_stack(object):
-    def __init__(self,global_latlon_grid = True):
+    def __init__(self,parent,global_latlon_grid = True):
         self.m_results            = []
         self.m_results_translated = []
         self.m_ages               = {}
         self.translations         = []
         self.marker_base          = 0
         self.global_latlon_grid   = global_latlon_grid # Toggle boundary conditions.
+        self.parent = parent
 
 # To merge two stacks, we need to identify the mapping between the two
 # sets of labels at the interface. The labels at the bottom start
@@ -654,8 +656,12 @@ class ccl_marker_stack(object):
                    ,thresh_inverse=thresh_inverse
                    ,global_latlon_grid = self.global_latlon_grid
                    ,norm_data=norm_data
-                   ,perform_threshold=perform_threshold)
+                   ,perform_threshold=perform_threshold
+                   ,workFileName=self.parent.workFileNames[self.parent.current_file]) 
 
+        print ('Dumping marker image before cleanup...')
+        dumpFileName = self.parent.workFileNames[self.parent.current_file] + '_marker_img_raw.csv' 
+        dump_array_to_csv (m1, dumpFileName)
         ### This is where you can put a filter to reduce the number of ccl-regions to analyze.
         if discard_below_pixel_area is not None:
             # print('')
@@ -683,6 +689,9 @@ class ccl_marker_stack(object):
             # print('m1 shape           ',m1.shape)
             # print('make_slice uniq    ',m1_unique.shape)
             # print('make_slice keeping ',len(idx_keep))
+            print ('Dumping marker image...')
+            dumpFileName = self.parent.workFileNames[self.parent.current_file] + '_marker_img_trimmed.csv' 
+            dump_array_to_csv (m1, dumpFileName)
             sw_timer.stamp('cms:make_slice_from:discard_below_pixel_area:end')
 
             # sw_timer.stamp('cms:make_slice_from:discard_below_pixel_area:start')
