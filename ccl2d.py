@@ -15,8 +15,8 @@ from geodata.stopwatch import sw_timer
 import csv
 
 # DUMP THRESHOLD RESULT OUT TO CSV FILE
-def dump_array_to_csv (array, filename):
-    print ('Dumping to '+filename)
+#def dump_array_to_csv (array, filename):
+#    print ('Dumping to '+filename)
 #    (ny, nx) = array.shape
 #    print ('(ny, nx) = ({}, {})'.format(ny, nx))
 #    with open (filename, 'w', newline='') as csvfile:
@@ -56,12 +56,12 @@ def ccl2d(data_in,thresh,verbose=False,graph=False,thresh_inverse=False,global_l
 
     if perform_threshold:
         sw_timer.stamp('ccl2d perform_threshold start')
-        ret, thresh = cv2.threshold(data, d_trigger, 1, cv2.THRESH_BINARY)
-        print ('Dumping threshold image...')
-        print ('workFilename = ' + workFileName)
-        dumpFileName = workFileName + '_thresh_img.csv'
-        print ('dumpFilename = ' + dumpFileName)
-        dump_array_to_csv (thresh, dumpFileName)
+#        ret, thresh = cv2.threshold(data, d_trigger, 1, cv2.THRESH_BINARY)
+#        print ('Dumping threshold image...')
+#        print ('workFilename = ' + workFileName)
+#        dumpFileName = workFileName + '_thresh_img.csv'
+#        print ('dumpFilename = ' + dumpFileName)
+#        dump_array_to_csv (thresh, dumpFileName)
 
         if not thresh_inverse:
             ret, thresh = cv2.threshold(data, d_trigger, d_out, cv2.THRESH_BINARY)

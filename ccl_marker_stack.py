@@ -41,7 +41,7 @@ from dask.distributed import Client
 import numpy as np
 import os
 from ccl2d import ccl2d
-from ccl2d import dump_array_to_csv
+#from ccl2d import dump_array_to_csv
 
 from geodata.stopwatch import sw_timer
 
@@ -659,9 +659,9 @@ class ccl_marker_stack(object):
                    ,perform_threshold=perform_threshold
                    ,workFileName=self.parent.workFileNames[self.parent.current_file]) 
 
-        print ('Dumping marker image before cleanup...')
-        dumpFileName = self.parent.workFileNames[self.parent.current_file] + '_marker_img_raw.csv' 
-        dump_array_to_csv (m1, dumpFileName)
+#        print ('Dumping marker image before cleanup...')
+#        dumpFileName = self.parent.workFileNames[self.parent.current_file] + '_marker_img_raw.csv' 
+#        dump_array_to_csv (m1, dumpFileName)
         ### This is where you can put a filter to reduce the number of ccl-regions to analyze.
         if discard_below_pixel_area is not None:
             # print('')
@@ -689,9 +689,9 @@ class ccl_marker_stack(object):
             # print('m1 shape           ',m1.shape)
             # print('make_slice uniq    ',m1_unique.shape)
             # print('make_slice keeping ',len(idx_keep))
-            print ('Dumping marker image...')
-            dumpFileName = self.parent.workFileNames[self.parent.current_file] + '_marker_img_trimmed.csv' 
-            dump_array_to_csv (m1, dumpFileName)
+#            print ('Dumping marker image...')
+#            dumpFileName = self.parent.workFileNames[self.parent.current_file] + '_marker_img_trimmed.csv' 
+#            dump_array_to_csv (m1, dumpFileName)
             sw_timer.stamp('cms:make_slice_from:discard_below_pixel_area:end')
 
             # sw_timer.stamp('cms:make_slice_from:discard_below_pixel_area:start')
